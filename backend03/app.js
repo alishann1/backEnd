@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import routerUserDb from "./router/user.router.js"
 
 const app = express()
 
@@ -36,6 +37,7 @@ app.use(cors(corsOption))
 
 //route configure
 
+app.use("/api/v1/user", routerUserDb)
 
 
 
