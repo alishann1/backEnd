@@ -12,7 +12,7 @@ const UserSchema = new Schema({
 
 
 
-// model 
+
 
 UserSchema.pre("save", async function () {
     if (!this.isModified("password")) return
@@ -25,9 +25,34 @@ UserSchema.pre("save", async function () {
     }
 }
 )
-const user = mongoose.model("user", UserSchema);
 
-export default user
+
+//verify password with hash
+
+UserSchema.methods.comparePassword = async function (password) {
+    try {
+        return await bcrypt.compare(password, this.password)
+    } catch (error) {
+        throw new Error("Failed to compare password")
+    }
+}
+
+
+
+
+
+// generate jwt token
+
+UserSchema.methods.generateToken = function () {
+    return JsonWebTokenError.sign({ email: this.email, id: this._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.JWT_EXPIRY_TIME })
+}
+
+
+// model 
+
+const User = mongoose.model("user", UserSchema);
+export default User
+
 
 
 
@@ -35,5 +60,4 @@ export default user
 // fname: { type: String, required: true },
 // email: { type: String, required: true },
 // pasword: { type: String, required: true }
-
 // export default UserSchema
