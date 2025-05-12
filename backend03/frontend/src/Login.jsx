@@ -20,7 +20,7 @@ function Login() {
       password,
     };
 
-    fetch("http://localhost:8080/api/v1/users/login", {
+    fetch("http://localhost:8080/api/v1/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

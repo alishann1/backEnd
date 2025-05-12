@@ -60,4 +60,21 @@ async function loginUser(req, res, next) {
   });
 }
 
-export { registerUser, loginUser };
+// del user
+async function delUser(req, res, next) {
+  const { email } = req.user
+
+
+  const user = await User.findOne({ email })
+  if (!user) {
+    return res.status(400).json({ message: "User not found" })
+  }
+
+  res.json({
+    message: "user data",
+    user
+  })
+
+}
+
+export { registerUser, loginUser, delUser };

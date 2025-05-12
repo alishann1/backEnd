@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import routerUserDb from "./router/user.router.js"
+import cookieParser from "cookie-parser"
 
 const app = express()
 
@@ -28,12 +29,14 @@ const corsOption = {
 
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credencials: true,
+    credentials: true,
 }
 
 // implement cors middleware
 
 app.use(cors(corsOption))
+
+app.use(cookieParser())
 
 //route configure
 
