@@ -1,8 +1,10 @@
 import { Schema } from "mongoose";
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const ownerSchema = new Schema(
     {
-        fullname: {
+        fullName: {
             type: String,
             required: true,
         },
@@ -28,20 +30,34 @@ const ownerSchema = new Schema(
         },
         isDeleted: {
             type: Boolean,
-            default: false
+            default: false,
         },
         isBlocked: {
             type: Boolean,
-            default: false
+            default: false,
         },
-        paskage: {
+        plan: {
             type: String,
-            default: "free"
-        }
+            default: "free",
+        },
     },
     {
         timestamps: true,
-    },
+    }
 );
 
+ownerSchema.pre("save", async function () {
+    if (!this.isModified("password")) {
+        next();
+    }
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+    } catch (error) {
+        next(error);
+    }
+});
+
 const Owner = mongoose.model("Owner", ownerSchema);
+
+export default Owner;

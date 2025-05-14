@@ -7,6 +7,8 @@ const app = express()
 // First File Steps
 
 // middle wares implement
+
+
 // json <inbuilt global middleware>
 
 app.use(express.json())
@@ -37,10 +39,15 @@ app.use(cors(corsOptions));
 //cookie parser <third party global middleware>
 app.use(cookieParser())
 
-// owner route 
 
+// owner route 
 import ownerRouter from "./src/routes/owner/owner.route.js"
 app.use("/api/v1/owner", ownerRouter)
+
+
+// error middleware
+import errorMiddleware from "./src/middlewares/error.middleware.js"
+app.use(errorMiddleware)
 
 
 //export app
