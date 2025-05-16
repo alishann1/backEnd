@@ -126,4 +126,40 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
 
 });
 
+
+
+//verify otp
+
+const verifyOtp = AsyncHandler(async (req, res, next) => {
+    const { otp, email } = req.body
+
+    //email check
+
+
+    const isEmailExist = await Owner.findOne({ email })
+    if (!isEmailExist) {
+        return next(new CustomError("Email not found", 404));
+    }
+    //
+
+    if (isEmailExist) {
+        const otpData = await Otp.findOne({ email: isEmailExist._id })
+    }
+
+    if (otpData.otpExpiry < Date.now()) {
+        return next(new CustomError("Otp expired", 404));
+    }
+    if (otpData.otp !== otp) {
+        return next(new CustomError("Otp not matched", 404));
+    }
+
+    await Owner.updateOne({ _id: isEmailExist._id }, { isVerified: true })
+
+    //clear otp
+
+    await Otp.deleteOne({ email: isEmailExist._id })
+
+
+})
+
 export { registerOwner };
