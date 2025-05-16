@@ -154,4 +154,4 @@ const verifyOtp = AsyncHandler(async (req, res, next) => {
     }
 });
 
-export { registerOwner };
+export { registerOwner, verifyOtp };
