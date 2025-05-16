@@ -3,6 +3,6 @@ import { registerOwner, verifyOtp } from "../../controllers/owner/owner.controll
 const router = Router();
 
 router.route("/register").post(registerOwner);
-router.route("/verify-otp").post(verifyOtp)
+router.route("/verify-otp").post(verifyOtp);
 
 export default router
