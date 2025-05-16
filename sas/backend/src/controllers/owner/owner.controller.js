@@ -7,7 +7,6 @@ import Otp from "../../models/otp/otp.model.js";
 import sendEmail from "../../utils/sendEmail.js";
 import htmlTemplate from "../../utils/emailHTMLTemplate.js";
 
-
 // const registerOwner = async function (req, res, next) {
 //     res.send("register owner")
 //     // new CustomError("This is a custom error", 404, { data: null })
@@ -65,10 +64,7 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
         return next(new CustomError("Owner not created", 407980));
     }
 
-
-
-
-    console.log(owner, "OWNER")
+    console.log(owner, "OWNER");
 
     // create school
 
@@ -87,27 +83,26 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
     // email send
 
     try {
-        const info = await sendEmail(owner.email, "OTP Verification", htmlTemplate(owner.fullName, ownerOtp));
+        const info = await sendEmail(
+            owner.email,
+            "OTP Verification",
+            htmlTemplate(owner.fullName, ownerOtp)
+        );
         if (info) {
             const otp = await Otp.create({
                 email: owner._id,
                 otp: ownerOtp,
                 otpExpiry: new Date(Date.now() + 10 * 60 * 1000),
-                lastOtpSentAt: Date.now()
-            })
+                lastOtpSentAt: Date.now(),
+            });
             if (!otp) {
                 return next(new CustomError("Otp not created", 4780));
             }
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return next(new CustomError("Email send failed", 6867));
-
     }
-
-
-
-
 
     if (!school) {
         return next(new CustomError("School not created", 79879));
@@ -117,49 +112,46 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
         message: "Owner and school created succesfully",
         status: 1,
         data: {
-            owner, school
-        }
-    })
-
-
-
-
+            owner,
+            school,
+        },
+    });
 });
 
-
-
-//verify otp
-
+// verify otp
 const verifyOtp = AsyncHandler(async (req, res, next) => {
-    const { otp, email } = req.body
-
-    //email check
-
-
-    const isEmailExist = await Owner.findOne({ email })
+    const { otp, email } = req.body;
+    // email check
+    const isEmailExist = await Owner.findOne({ email });
     if (!isEmailExist) {
         return next(new CustomError("Email not found", 404));
     }
+
     //
-
     if (isEmailExist) {
-        const otpData = await Otp.findOne({ email: isEmailExist._id })
+        const otpData = await Otp.findOne({ email: isEmailExist._id });
+
+        if (!otpData) {
+            return next(new CustomError("Otp not found", 404));
+        }
+
+        if (otpData.otpExpiry < Date.now()) {
+            return next(new CustomError("Otp expired", 404));
+        }
+
+        if (otpData.otp !== otp) {
+            return next(new CustomError("Otp not matched", 404));
+        }
+
+        await Owner.updateOne({ _id: isEmailExist._id }, { isVerify: true });
+        //  clear otp
+        await Otp.deleteOne({ email: isEmailExist._id });
+
+        res.json({
+            message: "OTP VERIFIED SUCCESFULLY",
+            status: 1,
+        });
     }
-
-    if (otpData.otpExpiry < Date.now()) {
-        return next(new CustomError("Otp expired", 404));
-    }
-    if (otpData.otp !== otp) {
-        return next(new CustomError("Otp not matched", 404));
-    }
-
-    await Owner.updateOne({ _id: isEmailExist._id }, { isVerified: true })
-
-    //clear otp
-
-    await Otp.deleteOne({ email: isEmailExist._id })
-
-
-})
+});
 
 export { registerOwner };
