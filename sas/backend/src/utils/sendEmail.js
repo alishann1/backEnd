@@ -22,7 +22,6 @@ async function sendEmail(to, subject, message) {
             subject: subject,
             html: message
         })
-        console.log('ghjhgjgjgjgjh', info)
         return info
     } catch (error) {
         throw new Error(error)
