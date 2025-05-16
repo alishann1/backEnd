@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 
 const ownerSchema = new Schema(
     {
@@ -25,9 +25,9 @@ const ownerSchema = new Schema(
             type: Boolean,
             default: false,
         },
-        profile: {
-            type: String,
-        },
+        // profile: {
+        //     type: String,
+        // },
         isDeleted: {
             type: Boolean,
             default: false,
@@ -51,8 +51,8 @@ ownerSchema.pre("save", async function () {
         next();
     }
     try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
+        const salt = await bcryptjs.genSalt(10);
+        this.password = await bcryptjs.hash(this.password, salt);
     } catch (error) {
         next(error);
     }

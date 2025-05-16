@@ -4,7 +4,7 @@ async function errorMiddleware(err, req, res, next) {
 
     if (err.code === 11000) {
         message = "Duplicate key error",
-            statusCode = 400
+            statusCode = 409
     }
 
 

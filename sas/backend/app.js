@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // cors middle ware <third party global middleware>
 
-const whiteList = [];
+const whiteList = ["http://localhost:5173"];
 const corsOptions = {
     origin: function (origin, cb) {
         if (whiteList.includes(origin) || !origin) {
