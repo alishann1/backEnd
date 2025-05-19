@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const OtpInput = ({ formData }) => {
@@ -6,6 +7,7 @@ const OtpInput = ({ formData }) => {
   const [timer, setTimer] = useState(60);
   const [resendEnabled, setResendEnabled] = useState(false);
   const inputRefs = useRef([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (timer === 0) {
@@ -68,6 +70,7 @@ const OtpInput = ({ formData }) => {
       })
       .then((data) => {
         if (data.status === 1) {
+          navigate("/auth/login");
           return toast.success("OTP verified successfully");
         }
       })
