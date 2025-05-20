@@ -16,6 +16,7 @@ const RegisterForm = () => {
     address: "",
     contactNumber: "",
     type: "",
+    profile: undefined,
   });
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -43,14 +44,21 @@ const RegisterForm = () => {
   // hanlde register
 
   function handleSubmit() {
+    const avalialbleFormData = new FormData();
+    for (const key in formData) {
+      if (formData[key]) {
+        avalialbleFormData.append(key, formData[key]);
+      }
+    }
+
     setLoading(true);
     fetch("http://localhost:7070/api/v1/owner/register", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
       credentials: "include",
-      body: JSON.stringify(formData),
+      body: avalialbleFormData,
     })
       .then((res) => {
         if (res.status === 409) {
@@ -84,7 +92,7 @@ const RegisterForm = () => {
           <div className="flex  pl-4 flex-col gap-2">
             <h3 className="text-3xl font-semibold">
               Welcome to <br />
-              Schoolify LMS 👋
+              Schoolify lms 👋
             </h3>
             <p className="text-sm text-slate-700">
               Kindly fill in your details below to sign in.
@@ -97,6 +105,7 @@ const RegisterForm = () => {
               handleNext={handleNext}
               formData={formData}
               handleChange={handleChange}
+              setFormData={setFormData}
             />
           )}
           {step === 2 && (
