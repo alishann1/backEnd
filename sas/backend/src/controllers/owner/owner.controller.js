@@ -216,10 +216,16 @@ const imageUpload = AsyncHandler(async (req, res, next) => {
     if (!file) {
         return next(new CustomError("Image not found", 404))
     }
-    res.json({
-        message: "Image uploaded successfully",
-        status: 1,
-    })
+
+    //file upload to cloudinary 
+
+    const imageObj = await uploadImage(file.path)
+    if (!imageObj)
+
+        res.json({
+            message: "Image uploaded successfully",
+            status: 1,
+        })
 })
 
 
