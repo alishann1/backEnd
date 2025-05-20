@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
 import mongoose from "mongoose";
+
 import bcryptjs from "bcryptjs";
 
 const ownerSchema = new Schema(
@@ -25,9 +26,10 @@ const ownerSchema = new Schema(
             type: Boolean,
             default: false,
         },
-        // profile: {
-        //     type: String,
-        // },
+        profile: {
+            type: String,
+            required: false
+        },
         isDeleted: {
             type: Boolean,
             default: false,

@@ -6,6 +6,7 @@ import generateOTP from "../../utils/generateOTP.js";
 import Otp from "../../models/otp/otp.model.js";
 import sendEmail from "../../utils/sendEmail.js";
 import htmlTemplate from "../../utils/emailHTMLTemplate.js";
+import uploadImage from "../../utils/cloudinary.js";
 
 // const registerOwner = async function (req, res, next) {
 //     res.send("register owner")
@@ -19,7 +20,7 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
         email,
         phone,
         password,
-        // profile,
+        profile,
         plan,
         name,
         city,
@@ -27,6 +28,25 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
         contactNumber,
         type,
     } = req.body;
+
+    console.log(req.body)
+    let secureUrl
+    const { file } = req
+    if (file) {
+        const localpath = file.path
+        try {
+            const imageUpload = await uploadImage(localpath);
+            if (!imageUpload) {
+                return next(new CustomError("Image upload failed", 500))
+            }
+
+            secureUrl = imageUpload.secure_url
+            console.log(secureUrl, "SECURE URL")
+        } catch (error) {
+            return next(new CustomError("Image upload failed", 500))
+        }
+    }
+
 
     // field check
     const fieldsArray = [
@@ -43,6 +63,8 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
         type,
     ];
 
+
+
     for (const field of fieldsArray) {
         if (!field) {
             return next(new CustomError("All fields are required", 9000));
@@ -56,7 +78,7 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
         email,
         phone,
         password,
-        // profile,
+        profile: secureUrl || undefined,
         plan,
     });
 
