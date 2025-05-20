@@ -20,7 +20,7 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
         email,
         phone,
         password,
-        profile,
+        // profile,
         plan,
         name,
         city,
