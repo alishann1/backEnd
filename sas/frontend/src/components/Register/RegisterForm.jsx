@@ -92,7 +92,7 @@ const RegisterForm = () => {
           <div className="flex  pl-4 flex-col gap-2">
             <h3 className="text-3xl font-semibold">
               Welcome to <br />
-              Schoolify lms 👋
+              Schoolify LMS 👋
             </h3>
             <p className="text-sm text-slate-700">
               Kindly fill in your details below to sign in.
