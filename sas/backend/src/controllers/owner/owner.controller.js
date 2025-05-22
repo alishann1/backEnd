@@ -285,7 +285,8 @@ const login = AsyncHandler(async (req, res, next) => {
         httpOnly: true,
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), //7 days 
         secure: false,
-        sameSite: "none"
+        sameSite: "none",
+        path: "/"
     })
 
     // login user 
