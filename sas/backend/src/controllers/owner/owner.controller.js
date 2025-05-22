@@ -107,13 +107,6 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
 
 
 
-
-
-
-
-
-
-
     res.status(201).json({
         message: "OWNER AND SCHOOL CREATED SUCCESFFULY ",
         status: 1,
@@ -121,16 +114,6 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
             owner, school
         }
     })
-
-
-
-
-
-
-
-
-
-
 
 
 });
@@ -289,6 +272,22 @@ const login = AsyncHandler(async (req, res, next) => {
         return next(new CustomError("Please verify your account first before login", 401))
     }
 
+
+    // generate token
+    const token = isEmailExist.generateToken();
+    console.log(chalk.green.bold("JWT TOKEN ", token))
+
+    if (!token) {
+        return next(new CustomError("Token not generated", 500))
+    }
+
+    res.cookie("token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), //7 days 
+        secure: false,
+        sameSite: "none"
+    })
+
     // login user 
     res.json({
         status: 1,
@@ -307,13 +306,6 @@ const login = AsyncHandler(async (req, res, next) => {
 // const verifyAccount = AsyncHandler(async(req,res,next)=>{
 
 // })
-
-
-
-
-
-
-
 
 
 export { registerOwner, verifyOtp, resendOtp, imageUpload, login };

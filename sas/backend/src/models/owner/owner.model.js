@@ -63,6 +63,15 @@ ownerSchema.methods.comparePassword = async function (password) {
         throw new CustomError("Password comparison failed", 500)
     }
 }
+// generate jwt token   
+ownerSchema.methods.generateToken = function () {
+    return jwt.sign({ id: this._id, email: this.email }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRY
+    })
+}
+
+
+
 
 
 const Owner = mongoose.model("owner", ownerSchema)
