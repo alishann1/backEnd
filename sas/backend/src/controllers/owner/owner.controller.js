@@ -275,7 +275,7 @@ const login = AsyncHandler(async (req, res, next) => {
 
     // generate token
     const token = isEmailExist.generateToken();
-    console.log(chalk.green.bold("JWT TOKEN ", token))
+    console.log(("JWT TOKEN ", token))
 
     if (!token) {
         return next(new CustomError("Token not generated", 500))

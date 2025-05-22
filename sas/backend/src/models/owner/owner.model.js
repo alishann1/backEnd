@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs"
 import CustomError from "../../utils/CustomError.js";
+import jwt from "jsonwebtoken"
 const ownerSchema = new Schema({
     fullName: {
         type: String,
@@ -69,8 +70,6 @@ ownerSchema.methods.generateToken = function () {
         expiresIn: process.env.JWT_EXPIRY
     })
 }
-
-
 
 
 
