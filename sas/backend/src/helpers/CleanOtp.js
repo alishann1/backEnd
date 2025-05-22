@@ -1,6 +1,6 @@
-import Otp from "../models/otp/otp.model";
+import Otp from "../models/otp/otp.model.js";
 
-async function cleanOtp(ownerId) {
+    async function cleanOtp(ownerId) {
     const isOtpExist = await Otp.findOne({ email: ownerId });
 
     //check 
