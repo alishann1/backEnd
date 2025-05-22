@@ -3,6 +3,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Auth from "./layouts/Auth";
 import VerifyAccount from "./pages/VerifyAccount";
+import Owner from "./layouts/Owner";
+import Dashboard from "./pages/Dashboard";
 const router = createBrowserRouter([
   {
     path: "/auth",
