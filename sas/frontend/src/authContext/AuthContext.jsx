@@ -1,8 +1,8 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
 const AuthContext = createContext(null);
 
-//provider
+// provider
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -10,32 +10,40 @@ function AuthProvider({ children }) {
   const [isLogin, setIsLogin] = useState(false);
 
   // handle login
-
-  function handleLogin(email, password) {
+  async function handleLogin(email, password) {
     setLoading(true);
-    fetch("http://localhost:7070/api/v1/owner/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-      .then(async (res) => {
-        const data = await res.json();
-        if (!res.ok) {
-          console.log(data.message || "Something went wrong");
-          throw new Error(data.message || "Something went wrong");
-        }
-        return data;
-      })
-      .then((data) => {});
+    try {
+      const response = await fetch("http://localhost:7070/api/v1/owner/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Add this to handle cookies
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      setUser(data.data.user);
+      setIsLogin(true);
+      return response; // Return the response for the component
+    } catch (err) {
+      console.error(err);
+      throw err; // Re-throw to handle in the component
+    } finally {
+      setLoading(false);
+    }
   }
 
-  return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ handleLogin, isLogin, user, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
-export default { AuthContext, AuthProvider };
+export { AuthContext, AuthProvider };

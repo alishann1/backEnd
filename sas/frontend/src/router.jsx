@@ -5,6 +5,7 @@ import Auth from "./layouts/Auth";
 import VerifyAccount from "./pages/VerifyAccount";
 import Owner from "./layouts/Owner";
 import Dashboard from "./pages/Dashboard";
+import ProtectedRoutes from "./ProtectedRoutes";
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -30,7 +31,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoutes>
+            <Dashboard />
+          </ProtectedRoutes>
+        ),
       },
     ],
   },
