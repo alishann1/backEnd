@@ -8,6 +8,8 @@ import Otp from "../../models/otp/otp.model.js";
 import sendEmail from "../../utils/sendEmail.js";
 import cleanOtp from "../../helpers/CleanOtp.js";
 import uploadImage from "../../utils/cloudinary.js";
+import jwt from "jsonwebtoken"
+import generateRefreshToken from "../../utils/generateRefreshToken.js";
 // const registerOwner =async function(req,res,next){
 //     throw new CustomError("this is my cutom error" , 404 , {data:null})
 // }
