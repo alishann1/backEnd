@@ -273,7 +273,7 @@ const login = AsyncHandler(async (req, res, next) => {
     }
 
 
-    // generate token
+    // generate access token
     const token = isEmailExist.generateToken();
     console.log(("JWT TOKEN ", token))
 
@@ -281,9 +281,26 @@ const login = AsyncHandler(async (req, res, next) => {
         return next(new CustomError("Token not generated", 500))
     }
 
-    res.cookie("token", token, {
+    // refresh token create 
+    const refreshToken = generateRefreshToken({ id: isEmailExist._id, email: isEmailExist.email })
+    if (!refreshToken) {
+        return next(new CustomError("Failed to genrate refresh token ", 400))
+    }
+
+    console.log(chalk.red.bold("REFRESHTOKEN", refreshToken))
+    // store refresh token in db
+    try {
+        await Owner.findOneAndUpdate({ id: isEmailExist._id }, { refreshToken })
+    } catch (error) {
+        return next(new CustomError("Fail to store refresh token in db", 401))
+    }
+
+
+
+    //  set refresh token in cookies 
+    res.cookie("refresh", refreshToken, {
         httpOnly: true,
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), //7 days 
+        expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000), //15 days 
         secure: true,
         sameSite: "none",
         path: "/"
