@@ -325,6 +325,45 @@ const me = AsyncHandler(async (req, res, next) => {
         }
     })
 })
+// refresh access token using refresh token 
+const refresh = AsyncHandler(async (req, res, next) => {
+    // get refresh token 
+    const refreshToken = req.cookies.refresh
+    console.log(chalk.black.bold.bgWhite("REFRESH TOKEN GET FROM COOKIES ", refreshToken));
+    if (!refreshToken) {
+        return next(new CustomError("Refresh Token not found ", 404))
+    }
+
+    // check refresh token 
+    console.log(process.env.REFRESH_TOKEN_SECRET, "ENV VARIBALE ")
+    const decodeUserData = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+    console.log(chalk.black.bold.bgWhite("Decoded data", decodeUserData))
+    if (!decodeUserData) {
+        return next(new CustomError("Invalid refresh token ", 401));
+    }
+    // check refresh token store is avaliable in db 
+
+    const isValidRefreshToken = await Owner.findOne({ email: decodeUserData.email });
+    if (!isValidRefreshToken) {
+        return next(new CustomError("Invalid refresh token ", 401))
+    }
+
+    // generate new access token 
+    const newAccessToken = isValidRefreshToken.generateToken();
+
+    if (!newAccessToken) {
+        return next(new CustomError("failed to refresh access token ", 400))
+    }
+
+    console.log(chalk.black.bold.bgWhite("New accesstoken", newAccessToken))
+
+    res.json({
+        message: "Token refreesh successfully ..",
+        status: 1,
+        accessToken: newAccessToken
+    })
 
 
-export { registerOwner, verifyOtp, resendOtp, imageUpload, me, login };
+})
+
+export { registerOwner, verifyOtp, resendOtp, imageUpload, me, refresh, login };
