@@ -1,46 +1,18 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
+import { createContext } from "react";
 
 const AuthContext = createContext(null);
 
-// provider
+//provider
 
 function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  const persistValue = JSON.parse(localStorage.getItem("persist")) || "true";
 
-  // handle login
-  async function handleLogin(email, password) {
-    setLoading(true);
-    try {
-      const response = await fetch("http://localhost:7070/api/v1/owner/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Add this to handle cookies
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      setUser(data.data.user);
-      setIsLogin(true);
-      return response; // Return the response for the component
-    } catch (err) {
-      console.error(err);
-      throw err; // Re-throw to handle in the component
-    } finally {
-      setLoading(false);
-    }
-  }
+  const [auth, setAuth] = useState({});
+  const [persist, setPersist] = useState();
 
   return (
-    <AuthContext.Provider value={{ handleLogin, isLogin, user, loading }}>
+    <AuthContext.Provider value={{ auth, setAuth, persist, setPersist }}>
       {children}
     </AuthContext.Provider>
   );
