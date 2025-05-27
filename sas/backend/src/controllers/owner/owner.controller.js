@@ -435,17 +435,6 @@ const refresh = AsyncHandler(async (req, res, next) => {
 
     // check refresh token store is avaliable in db 
 
-
-
-
-
-
 })
-
-
-
-
-
-
 
 export { registerOwner, verifyOtp, resendOtp, imageUpload, me, refresh, login };
