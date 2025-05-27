@@ -5,7 +5,7 @@ const AuthContext = createContext(null);
 // provider
 
 function AuthProvider({ children }) {
-  const persistValue = JSON.parse(localStorage.getItem("persist")) || true;
+  const persistValue = JSON.parse(localStorage.getItem("persist")) || false;
 
   const [auth, setAuth] = useState({});
   const [persist, setPersist] = useState(persistValue);
