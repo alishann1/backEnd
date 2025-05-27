@@ -9,11 +9,11 @@ const Dashboard = () => {
     async function fetchData() {
       try {
         const res = await axiosPrivate.get("/me");
+        console.log(res, "Response");
 
         if (res?.data?.status === 1) {
           setData(res?.data?.data);
         }
-        console.log(res, "Response");
       } catch (error) {
         console.log(error, "errror");
       } finally {
