@@ -2,7 +2,7 @@ import Owner from "../../models/owner/owner.model.js";
 import School from "../../models/school/School.model.js";
 import AsyncHandler from "../../utils/AsyncHandler.js";
 import CustomError from "../../utils/CustomError.js";
-import emailHtmlTemplate from "../../utils/emailHTMLTemplat.js";
+import emailHtmlTemplate from "../../utils/emailHTMLTemplate.js";
 import generateOTP from "../../utils/generateOtp.js"
 import Otp from "../../models/otp/otp.model.js";
 import sendEmail from "../../utils/sendEmail.js";
