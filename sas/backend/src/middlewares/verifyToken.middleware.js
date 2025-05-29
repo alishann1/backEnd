@@ -2,7 +2,7 @@ import CustomError from "../utils/CustomError.js";
 import jwt from "jsonwebtoken";
 function verifyToken(req, res, next) {
     const bearerToken = req.headers.authorization;
-    console.log(req.headers, "HEADERSSSSSSSSSSSSS")
+    console.log(req.headers, "HEADERS")
     console.log("TOKEN FROM HEADER", bearerToken)
     if (!bearerToken) {
         return next(new CustomError("Token not found", 401));
