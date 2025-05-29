@@ -11,6 +11,7 @@ import uploadImage from "../../utils/cloudinary.js";
 import chalk from "chalk";
 import jwt from "jsonwebtoken"
 import generateRefreshToken from "../../utils/generateRefreshToken.js";
+import { Resolver } from "dns";
 // const registerOwner =async function(req,res,next){
 //     throw new CustomError("this is my cutom error" , 404 , {data:null})
 // }
@@ -455,6 +456,21 @@ const logout = AsyncHandler(async (req, res, next) => {
 
     isUserExist.refreshToken = null
     await isUserExist.save();
+
+
+    // clear cookies
+
+    res.clearCookie("refresh", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/",
+        expires: new Date(Date.now())
+    })
+    res.json({
+        message: "Logout successfully",
+        status: 1
+    })
 
 })
 
