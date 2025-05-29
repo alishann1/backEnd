@@ -38,12 +38,17 @@ const ownerSchema = new Schema({
     },
     plan: {
         type: String,
-        default: "free"
+        require: false
     },
     refreshToken: {
         type: String,
         default: null
-    }
+    },
+    role: {
+        type: String,
+        enum: ["OWNER", "PRINCIPAL", "TEACHER", "STUDENT"],
+        default: "OWNER"
+    },
 
 }, { timestamps: true })
 
@@ -51,7 +56,7 @@ const ownerSchema = new Schema({
 
 ownerSchema.pre("save", async function () {
     if (!this.isModified("password")) {
-        next()
+        return
     }
     try {
         const salt = await bcrypt.genSalt(10)
