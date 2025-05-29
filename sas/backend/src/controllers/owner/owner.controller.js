@@ -527,16 +527,6 @@ let addPrincipal = AsyncHandler(async (req, res, next) => {
             data: principal
         })
 
-
-
-
-
-
-
 })
-
-
-
-
 
 export { registerOwner, verifyOtp, resendOtp, imageUpload, me, refresh, login, logout, addPrincipal };
