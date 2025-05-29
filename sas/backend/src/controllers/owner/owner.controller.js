@@ -437,4 +437,25 @@ const refresh = AsyncHandler(async (req, res, next) => {
 
 })
 
-export { registerOwner, verifyOtp, resendOtp, imageUpload, me, refresh, login };
+
+// logout
+
+const logout = AsyncHandler(async (req, res, next) => {
+    const user = req?.user;
+    if (!user) {
+        return next(new CustomError("User not found", 404))
+    }
+    //search in database
+    const isUserExist = await Owner.findOne({ email: user.email })
+    if (!isUserExist) {
+        return next(new CustomError("User not found", 404))
+    }
+
+    // null refresh token field in db
+
+    isUserExist.refreshToken = null
+    await isUserExist.save();
+
+})
+
+export { registerOwner, verifyOtp, resendOtp, imageUpload, me, refresh, login, logout };
