@@ -42,7 +42,23 @@ const LoginForm = () => {
           };
         });
         localStorage.setItem("persist", true);
-        navigate("/owner/dashboard");
+        console.log(res, "response");
+        switch (res?.data?.data?.user?.role) {
+          case "OWNER":
+            navigate("/owner/dashboard");
+            break;
+          case "PRINCIPAL":
+            navigate("/principal/dashboard");
+            break;
+          case "TEACHER":
+            navigate("/teacher/dashboard");
+            break;
+          case "STUDENT":
+            navigate("/student/dashboard");
+            break;
+          default:
+            navigate("/auth/login");
+        }
       }
     } catch (error) {
       console.log(error);
