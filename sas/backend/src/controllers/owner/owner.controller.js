@@ -128,16 +128,6 @@ const registerOwner = AsyncHandler(async function (req, res, next) {
     })
 
 
-
-
-
-
-
-
-
-
-
-
 });
 
 
