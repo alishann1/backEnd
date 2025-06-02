@@ -416,7 +416,8 @@ const refresh = AsyncHandler(async (req, res, next) => {
         res.json({
             message: "Token refreesh successfully ..",
             status: 1,
-            accessToken: newAccessToken
+            accessToken: newAccessToken,
+            data: isValidRefreshToken  // user object
         })
 
 
@@ -527,6 +528,16 @@ let addPrincipal = AsyncHandler(async (req, res, next) => {
             data: principal
         })
 
+
+
+
+
+
+
 })
+
+
+
+
 
 export { registerOwner, verifyOtp, resendOtp, imageUpload, me, refresh, login, logout, addPrincipal };
