@@ -17,8 +17,6 @@ router.route("/logout").get(verifyToken, logout)
 router.route("/get-user/:userId").get(getUser)
 router.route("/all").get(getAll)
 router.route("/add-principal").post(verifyToken, isAllow("OWNER"), addPrincipal) //["OWNER" ,  "TEACHER"]
-// req
-// file :{ }
+
 export default router
 
-// async  --> fn
