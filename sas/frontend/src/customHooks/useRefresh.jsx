@@ -19,7 +19,7 @@ function useRefresh() {
           return {
             ...prev,
             accessToken: res?.data?.accessToken,
-            data: res?.data?.data,
+            user: res?.data?.data,
           };
         });
 
